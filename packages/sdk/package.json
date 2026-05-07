@@ -1,0 +1,60 @@
+{
+  "name": "lacuna-sdk",
+  "version": "0.2.0",
+  "description": "Official TypeScript SDK for the Lacuna Music API — generate AI music programmatically.",
+  "keywords": [
+    "lacuna",
+    "music",
+    "ai",
+    "sdk",
+    "typescript",
+    "music-generation",
+    "ai-music",
+    "webhook"
+  ],
+  "license": "MIT",
+  "author": "Louis Tsang <louistsangjk@gmail.com>",
+  "homepage": "https://lacuna.fm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JOYLINK-LTD/lacuna-toolkit.git",
+    "directory": "packages/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/JOYLINK-LTD/lacuna-toolkit/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./webhooks": {
+      "types": "./dist/webhooks.d.ts",
+      "import": "./dist/webhooks.js",
+      "require": "./dist/webhooks.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,15 @@
+src
+node_modules
+.github
+.gitignore
+.editorconfig
+tsconfig.json
+tsup.config.ts
+*.tsbuildinfo
+*.log
+.DS_Store
+.env
+.env.local
+.idea
+.vscode
+coverage

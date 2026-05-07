@@ -1,0 +1,53 @@
+{
+  "name": "lacuna-mcp",
+  "version": "0.2.0",
+  "description": "Model Context Protocol (MCP) server for the Lacuna Music API — generate AI music from MCP-compatible clients like Claude Desktop and Claude Code.",
+  "keywords": [
+    "lacuna",
+    "music",
+    "ai",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "claude-desktop",
+    "music-generation",
+    "ai-music"
+  ],
+  "license": "MIT",
+  "author": "Louis Tsang <louistsangjk@gmail.com>",
+  "homepage": "https://lacuna.fm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JOYLINK-LTD/lacuna-toolkit.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/JOYLINK-LTD/lacuna-toolkit/issues"
+  },
+  "type": "module",
+  "bin": {
+    "lacuna-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "lacuna-sdk": "workspace:*",
+    "zod": "^3.23.8"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
