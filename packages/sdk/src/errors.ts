@@ -126,6 +126,80 @@ export class InternalServerError extends APIError {
   }
 }
 
+/**
+ * 503 — server is temporarily unavailable.
+ *
+ * Inspect `code` to distinguish concrete reasons. `retryAfter` is parsed from
+ * the `Retry-After` header (or the `retry_after_seconds` body field as
+ * fallback) so callers can back off without re-parsing the response.
+ */
+export class ServiceUnavailableError extends APIError {
+  /** Seconds the server is asking the client to wait, if provided. */
+  readonly retryAfter: number | undefined
+
+  constructor(payload: ApiErrorPayload['error'], headers: Record<string, string> = {}) {
+    super(503, payload, headers)
+    this.name = 'ServiceUnavailableError'
+    this.retryAfter = parseRetryAfter(headers, payload.retry_after_seconds)
+    Object.setPrototypeOf(this, new.target.prototype)
+  }
+}
+
+/**
+ * 503 `model_unavailable` — the requested generation model is circuit-broken.
+ *
+ * The SDK does NOT automatically fall back to a different model: each model
+ * has a different credit cost, so silently switching would charge the caller
+ * for a model they didn't ask for. Instead, catch this error and decide
+ * which model to retry with (or wait `retryAfterSeconds` and retry the same one).
+ *
+ * @example
+ * ```ts
+ * try {
+ *   await lacuna.music.generations.create({ model: 'aether', style, title })
+ * } catch (err) {
+ *   if (err instanceof ModelUnavailableError) {
+ *     // err.model — which model is currently down ('aether' here)
+ *     // err.retryAfterSeconds — server's suggested cool-down
+ *     // pick a different model (e.g. 'echo' / 'nocturne') and retry
+ *   }
+ * }
+ * ```
+ */
+export class ModelUnavailableError extends ServiceUnavailableError {
+  /** The model codename that is currently unavailable. */
+  readonly model: string
+  /**
+   * Server-suggested wait in seconds before the model recovers.
+   *
+   * Same value as `retryAfter` on the parent class; named explicitly here
+   * because it's the load-bearing field for this error type.
+   */
+  readonly retryAfterSeconds: number
+
+  constructor(payload: ApiErrorPayload['error'], headers: Record<string, string> = {}) {
+    super(payload, headers)
+    this.name = 'ModelUnavailableError'
+    this.model = payload.model ?? ''
+    this.retryAfterSeconds = this.retryAfter ?? 0
+    Object.setPrototypeOf(this, new.target.prototype)
+  }
+}
+
+function parseRetryAfter(
+  headers: Record<string, string>,
+  bodyFallback: number | undefined
+): number | undefined {
+  const raw = headers['retry-after']
+  if (raw) {
+    const parsed = Number(raw)
+    if (Number.isFinite(parsed)) return parsed
+  }
+  return typeof bodyFallback === 'number' && Number.isFinite(bodyFallback)
+    ? bodyFallback
+    : undefined
+}
+
 /** Network failure — DNS error, TCP reset, fetch threw, etc. */
 export class APIConnectionError extends LacunaError {
   override readonly cause: unknown
@@ -191,6 +265,11 @@ export function createAPIError(
       return new NotFoundError(payload, headers)
     case 429:
       return new RateLimitError(payload, headers)
+    case 503:
+      if (payload.code === 'model_unavailable') {
+        return new ModelUnavailableError(payload, headers)
+      }
+      return new ServiceUnavailableError(payload, headers)
     default:
       if (status >= 500) return new InternalServerError(status, payload, headers)
       return new APIError(status, payload, headers)

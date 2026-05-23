@@ -11,6 +11,7 @@ export default defineConfig({
   clean: true,
   shims: true,
   target: 'node18',
+  noExternal: ['lacuna-sdk'],
   outExtension() {
     return { js: '.cjs' }
   },

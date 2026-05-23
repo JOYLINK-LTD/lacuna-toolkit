@@ -5,6 +5,7 @@ import {
   APIConnectionError,
   APIError,
   APITimeoutError,
+  ModelUnavailableError,
   RateLimitError,
   createAPIError,
 } from './errors'
@@ -181,7 +182,7 @@ export class Lacuna {
 
         const error = createAPIError(response.status, parsed, responseHeaders)
 
-        if (attempt < maxRetries && shouldRetry(response.status)) {
+        if (attempt < maxRetries && shouldRetry(response.status, error)) {
           const wait =
             error instanceof RateLimitError && error.retryAfter !== undefined
               ? error.retryAfter * 1000
@@ -263,8 +264,11 @@ function safeJSON(text: string): unknown {
   }
 }
 
-function shouldRetry(status: number): boolean {
+function shouldRetry(status: number, error: APIError): boolean {
   if (status === 429) return true
+  // model_unavailable 是几分钟级的熔断，自动重试没意义 —— 把决策交给用户
+  // （切别的模型，或等 retryAfterSeconds 后自己重试）。
+  if (error instanceof ModelUnavailableError) return false
   if (status >= 500 && status < 600) return true
   return false
 }

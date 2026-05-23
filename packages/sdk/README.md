@@ -149,7 +149,7 @@ const lacuna = new Lacuna({
   apiKey: process.env.LACUNA_API_KEY,
   baseURL: 'https://lacuna.fm/api/v1', // override for staging
   timeout: 60_000,                     // ms per request, default 60_000
-  maxRetries: 2,                       // retries on 429/5xx, default 2
+  maxRetries: 2,                       // retries on 429/5xx (except `model_unavailable`), default 2
   defaultHeaders: { 'X-App-Name': 'my-pipeline' },
   fetch: customFetch,                  // custom fetch impl (proxy, instrumentation)
 })
@@ -254,6 +254,7 @@ import {
   APIError,
   AuthenticationError,
   InsufficientCreditsError,
+  ModelUnavailableError,
   PermissionError,
   RateLimitError,
   PollingTimeoutError,
@@ -266,6 +267,12 @@ try {
 } catch (err) {
   if (err instanceof RateLimitError) {
     console.log(`Backing off for ${err.retryAfter}s`)
+  } else if (err instanceof ModelUnavailableError) {
+    // The requested model is circuit-broken. The SDK won't auto-fallback —
+    // each model has a different credit cost. Pick another one yourself.
+    console.log(
+      `Model ${err.model} is down for ~${err.retryAfterSeconds}s; retrying with a different model`
+    )
   } else if (err instanceof InsufficientCreditsError) {
     // top up or pause the worker
   } else if (err instanceof APIError) {
@@ -274,20 +281,22 @@ try {
 }
 ```
 
-| Class                       | When it's thrown                                                          |
-| --------------------------- | ------------------------------------------------------------------------- |
-| `BadRequestError`           | `400` — invalid request body or parameters (`err.param` indicates which). |
-| `AuthenticationError`       | `401` — missing, invalid, expired, or revoked API key.                    |
-| `InsufficientCreditsError`  | `402` — credit balance too low.                                           |
-| `PermissionError`           | `403` — tier not high enough for the Music API.                           |
-| `NotFoundError`             | `404` — task does not exist or is not owned by this key.                  |
-| `RateLimitError`            | `429` — RPM or concurrent-request cap exceeded. Inspect `err.retryAfter`. |
-| `InternalServerError`       | `5xx` — server or upstream provider failure.                              |
-| `APIError`                  | Base class for any non-2xx response.                                      |
-| `APIConnectionError`        | Network failure (DNS, TCP reset, fetch threw).                            |
-| `APITimeoutError`           | Request exceeded `timeout` option.                                        |
-| `PollingTimeoutError`       | `waitFor` exceeded its `timeout` option.                                  |
-| `WebhookSignatureError`     | `constructEvent` rejected a request (exported from `lacuna-sdk/webhooks`).|
+| Class                       | When it's thrown                                                                                |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| `BadRequestError`           | `400` — invalid request body or parameters (`err.param` indicates which).                       |
+| `AuthenticationError`       | `401` — missing, invalid, expired, or revoked API key.                                          |
+| `InsufficientCreditsError`  | `402` — credit balance too low.                                                                 |
+| `PermissionError`           | `403` — tier not high enough for the Music API.                                                 |
+| `NotFoundError`             | `404` — task does not exist or is not owned by this key.                                        |
+| `RateLimitError`            | `429` — RPM or concurrent-request cap exceeded. Inspect `err.retryAfter`.                       |
+| `ServiceUnavailableError`   | `503` — server is temporarily unavailable. Inspect `err.retryAfter`.                            |
+| `ModelUnavailableError`     | `503` `model_unavailable` — the requested model is circuit-broken. Inspect `err.model` and `err.retryAfterSeconds`; the SDK does **not** auto-fallback (different models have different credit costs). |
+| `InternalServerError`       | `5xx` — server or upstream provider failure (other than `503`).                                 |
+| `APIError`                  | Base class for any non-2xx response.                                                            |
+| `APIConnectionError`        | Network failure (DNS, TCP reset, fetch threw).                                                  |
+| `APITimeoutError`           | Request exceeded `timeout` option.                                                              |
+| `PollingTimeoutError`       | `waitFor` exceeded its `timeout` option.                                                        |
+| `WebhookSignatureError`     | `constructEvent` rejected a request (exported from `lacuna-sdk/webhooks`).                      |
 
 `APIError` exposes `status`, `type`, `code`, `param`, and lower-cased `headers` so you can build retry, logging, or alerting logic without parsing strings.
 

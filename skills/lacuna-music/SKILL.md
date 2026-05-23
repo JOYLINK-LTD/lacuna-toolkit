@@ -69,18 +69,29 @@ Music API access requires a **Pro** plan or above. Lower tiers receive `403 perm
 
 ## Generation parameters
 
-| Field                  | Required             | Notes                                                                   |
-| ---------------------- | -------------------- | ----------------------------------------------------------------------- |
-| `style`                | yes                  | Free-text style description, up to 1000 chars.                          |
-| `title`                | yes                  | Track title.                                                            |
-| `lyrics`               | yes if not instrumental | Plain text, up to 5000 chars. Use `[Verse]` / `[Chorus]` markers.    |
-| `instrumental`         | no                   | `true` skips lyrics.                                                    |
-| `model`                | no                   | Defaults to `aether` (Lacuna Aether).                                   |
-| `vocal_gender`         | no                   | `'m'` or `'f'` — lead vocal hint.                                       |
-| `negative_tags`        | no                   | Style tags to avoid.                                                    |
-| `style_weight`         | no                   | 0–1.                                                                    |
-| `weirdness_constraint` | no                   | 0–1.                                                                    |
-| `audio_weight`         | no                   | 0–1.                                                                    |
+| Field                  | Required                | Models             | Notes                                                                   |
+| ---------------------- | ----------------------- | ------------------ | ----------------------------------------------------------------------- |
+| `style`                | yes                     | all                | Free-text style description, up to 1000 chars.                          |
+| `title`                | yes                     | all                | Track title.                                                            |
+| `lyrics`               | yes if not instrumental | all                | Plain text, up to 5000 chars. Use `[Verse]` / `[Chorus]` markers.       |
+| `instrumental`         | no                      | all                | `true` skips lyrics.                                                    |
+| `model`                | no                      | all                | `aether` (default), `echo`, or `nocturne`. See model table below.       |
+| `vocal_gender`         | no                      | aether             | `'m'` or `'f'` — lead vocal hint.                                       |
+| `negative_tags`        | no                      | aether             | Style tags to avoid.                                                    |
+| `style_weight`         | no                      | aether             | 0–1.                                                                    |
+| `weirdness_constraint` | no                      | aether             | 0–1.                                                                    |
+| `audio_weight`         | no                      | aether             | 0–1.                                                                    |
+| `duration`             | no                      | echo               | Target track length in seconds, 5–240. Default 60.                      |
+
+The API rejects model-incompatible fields with `400 invalid_param` (e.g. passing `duration` with `model: 'aether'`).
+
+### Models
+
+| Codename   | Best for                                                            | Notes                                                                  |
+| ---------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `aether`   | Default. General-purpose, supports vocals + advanced weight knobs.  | Only model that supports `extend` / `cover` / `replace` operations.    |
+| `echo`     | Short clips, BGM stingers, fast iteration with controllable length. | Use `duration` (5–240s). No vocal-gender / weight knobs.               |
+| `nocturne` | High-quality vocals and emotional expression — quality over speed.  | Style description carries vocal/BPM hints; no separate knobs.          |
 
 ## Lifecycle
 
@@ -108,6 +119,7 @@ For production workflows, prefer the `job.completed` webhook over polling. See [
 - Don't hardcode API keys; always read from `LACUNA_API_KEY`.
 - Don't assume `audio_url` is permanent — see above.
 - Don't retry on `403 tier_insufficient` or `402 insufficient_credits` — these are user-action errors.
+- On `503 model_unavailable`, the requested model is temporarily circuit-broken (`error.model` names which one). Switch to a different model and retry; do not loop on the same one. The SDK does **not** auto-fallback because each model has a different credit cost.
 
 ## Resources
 

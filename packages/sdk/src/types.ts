@@ -8,12 +8,15 @@
 /**
  * Generation model identifier.
  *
- * `aether` is the codename for the current production engine
- * (display name: **Lacuna Aether**). New models are added here as they ship;
- * the `string & {}` fallback keeps untyped values usable so callers don't have
+ * Codenames:
+ *   - `aether`    — Lacuna Aether (default, versatile flagship)
+ *   - `echo`      — Lacuna Echo (fast, duration-controlled, 5–240s)
+ *   - `nocturne`  — Lacuna Nocturne (premium vocal & emotion)
+ *
+ * The `string & {}` fallback keeps untyped values usable so callers don't have
  * to wait for an SDK release to opt in to a new model.
  */
-export type Model = 'aether' | (string & {})
+export type Model = 'aether' | 'echo' | 'nocturne' | (string & {})
 
 /** Lead vocal gender hint. */
 export type VocalGender = 'm' | 'f'
@@ -73,18 +76,20 @@ export interface CreateGenerationParams {
   title: string
   /** When `true`, generate an instrumental track and skip lyrics. */
   instrumental?: boolean
-  /** Generation model. Defaults to `aether` (Lacuna Aether). */
+  /** Generation model. Defaults to `aether`. */
   model?: Model
-  /** Lead vocal gender hint. */
+  /** Lead vocal gender hint (aether only). */
   vocal_gender?: VocalGender
-  /** Negative style tags to avoid. */
+  /** Negative style tags to avoid (aether only). */
   negative_tags?: string
-  /** 0–1, weight applied to the style prompt. */
+  /** 0–1, weight applied to the style prompt (aether only). */
   style_weight?: number
-  /** 0–1, allowed weirdness in the output. */
+  /** 0–1, allowed weirdness in the output (aether only). */
   weirdness_constraint?: number
-  /** 0–1, weight of audio reference (when supported by the model). */
+  /** 0–1, weight of audio reference (aether only). */
   audio_weight?: number
+  /** Target track duration in seconds, 5–240 (echo only). */
+  duration?: number
 }
 
 /** Common envelope shared by every webhook event. */
@@ -153,5 +158,14 @@ export interface ApiErrorPayload {
     code: string
     message: string
     param?: string
+    /** Set when `code === 'model_unavailable'` — the model that's currently circuit-broken. */
+    model?: string
+    /**
+     * Suggested wait time in seconds before retrying.
+     *
+     * Currently set on `model_unavailable` (503) responses. Mirrors the
+     * `Retry-After` header for callers that prefer reading the JSON body.
+     */
+    retry_after_seconds?: number
   }
 }

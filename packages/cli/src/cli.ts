@@ -219,17 +219,19 @@ attachGlobalFlags(
     .option('--lyrics-file <path>', 'Read lyrics from a file (UTF-8).')
     .option('--instrumental', 'Generate an instrumental track (no lyrics).', false)
     .addOption(
-      new Option('--model <model>', 'Generation model. Defaults to `aether` (Lacuna Aether).').choices([
-        'aether',
-      ])
+      new Option(
+        '--model <model>',
+        'Generation model. Defaults to `aether`. Use `echo` for fast/short tracks, `nocturne` for premium vocals.'
+      ).choices(['aether', 'echo', 'nocturne'])
     )
     .addOption(
-      new Option('--vocal-gender <gender>', 'Lead vocal gender hint.').choices(['m', 'f'])
+      new Option('--vocal-gender <gender>', 'Lead vocal gender hint (aether only).').choices(['m', 'f'])
     )
-    .option('--negative-tags <text>', 'Negative style tags to avoid.')
-    .option('--style-weight <number>', 'Style weight 0–1.', parseFloatOption)
-    .option('--weirdness-constraint <number>', 'Weirdness constraint 0–1.', parseFloatOption)
-    .option('--audio-weight <number>', 'Audio reference weight 0–1.', parseFloatOption)
+    .option('--negative-tags <text>', 'Negative style tags to avoid (aether only).')
+    .option('--style-weight <number>', 'Style weight 0–1 (aether only).', parseFloatOption)
+    .option('--weirdness-constraint <number>', 'Weirdness constraint 0–1 (aether only).', parseFloatOption)
+    .option('--audio-weight <number>', 'Audio reference weight 0–1 (aether only).', parseFloatOption)
+    .option('--duration <seconds>', 'Target duration in seconds, 5–240 (echo only).', parseIntOption)
     .option('--wait', 'Poll until the task reaches a terminal state.', false)
     .option(
       '--poll-interval <seconds>',
@@ -276,6 +278,7 @@ attachGlobalFlags(
     if (opts.styleWeight !== undefined) params.style_weight = opts.styleWeight
     if (opts.weirdnessConstraint !== undefined) params.weirdness_constraint = opts.weirdnessConstraint
     if (opts.audioWeight !== undefined) params.audio_weight = opts.audioWeight
+    if (opts.duration !== undefined) params.duration = opts.duration
 
     try {
       let task = await client.music.generations.create(params)

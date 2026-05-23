@@ -18,10 +18,12 @@ export {
   BadRequestError,
   InsufficientCreditsError,
   InternalServerError,
+  ModelUnavailableError,
   NotFoundError,
   PermissionError,
   PollingTimeoutError,
   RateLimitError,
+  ServiceUnavailableError,
 } from './errors'
 export type {
   ApiErrorPayload,

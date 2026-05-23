@@ -1,8 +1,8 @@
-# lacuna-cli
+# lacuna-toolkit
 
-[![npm version](https://img.shields.io/npm/v/lacuna-cli.svg)](https://www.npmjs.com/package/lacuna-cli)
-[![License: MIT](https://img.shields.io/npm/l/lacuna-cli.svg)](./LICENSE)
-[![Node.js](https://img.shields.io/node/v/lacuna-cli.svg)](https://nodejs.org)
+[![npm version](https://img.shields.io/npm/v/lacuna-toolkit.svg)](https://www.npmjs.com/package/lacuna-toolkit)
+[![License: MIT](https://img.shields.io/npm/l/lacuna-toolkit.svg)](./LICENSE)
+[![Node.js](https://img.shields.io/node/v/lacuna-toolkit.svg)](https://nodejs.org)
 
 Official command-line interface for the [Lacuna Music API](https://lacuna.fm). Generate AI music from a shell — for one-off prompts, scripting, or CI.
 
@@ -15,15 +15,15 @@ Official command-line interface for the [Lacuna Music API](https://lacuna.fm). G
 Use without installing:
 
 ```sh
-npx lacuna-cli --help
+npx lacuna-toolkit --help
 ```
 
 Or install globally:
 
 ```sh
-npm install -g lacuna-cli
+npm install -g lacuna-toolkit
 # or
-pnpm add -g lacuna-cli
+pnpm add -g lacuna-toolkit
 ```
 
 The CLI is invoked as `lacuna`.

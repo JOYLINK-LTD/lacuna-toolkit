@@ -73,24 +73,32 @@ server.registerTool(
         .optional()
         .describe('Generate an instrumental track (no lyrics). Defaults to false.'),
       model: z
-        .enum(['aether'])
+        .enum(['aether', 'echo', 'nocturne'])
         .optional()
-        .describe('Generation model. Defaults to `aether` (Lacuna Aether).'),
-      vocal_gender: z.enum(['m', 'f']).optional().describe('Lead vocal gender hint.'),
-      negative_tags: z.string().optional().describe('Negative style tags to avoid.'),
-      style_weight: z.number().min(0).max(1).optional().describe('Style weight 0–1.'),
+        .describe(
+          'Generation model. Defaults to `aether`. `echo` = fast, duration-controlled (5–240s). `nocturne` = premium vocal/emotion.'
+        ),
+      vocal_gender: z.enum(['m', 'f']).optional().describe('Lead vocal gender hint (aether only).'),
+      negative_tags: z.string().optional().describe('Negative style tags to avoid (aether only).'),
+      style_weight: z.number().min(0).max(1).optional().describe('Style weight 0–1 (aether only).'),
       weirdness_constraint: z
         .number()
         .min(0)
         .max(1)
         .optional()
-        .describe('Weirdness constraint 0–1.'),
+        .describe('Weirdness constraint 0–1 (aether only).'),
       audio_weight: z
         .number()
         .min(0)
         .max(1)
         .optional()
-        .describe('Audio reference weight 0–1.'),
+        .describe('Audio reference weight 0–1 (aether only).'),
+      duration: z
+        .number()
+        .min(5)
+        .max(240)
+        .optional()
+        .describe('Target track duration in seconds, 5–240 (echo only).'),
     },
   },
   async (args) => {
@@ -108,6 +116,7 @@ server.registerTool(
       if (args.weirdness_constraint !== undefined)
         params.weirdness_constraint = args.weirdness_constraint
       if (args.audio_weight !== undefined) params.audio_weight = args.audio_weight
+      if (args.duration !== undefined) params.duration = args.duration
 
       const task = await lacuna.music.generations.create(params)
       return { content: [{ type: 'text', text: formatTask(task) }] }

@@ -1,6 +1,6 @@
 {
-  "name": "lacuna-cli",
-  "version": "0.2.0",
+  "name": "lacuna-toolkit",
+  "version": "0.3.0",
   "description": "Official command-line interface for the Lacuna Music API.",
   "keywords": [
     "lacuna",
@@ -40,7 +40,9 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "commander": "^12.1.0",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
     "lacuna-sdk": "workspace:*"
   },
   "publishConfig": {
