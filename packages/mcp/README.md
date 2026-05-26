@@ -6,7 +6,7 @@
 
 [Model Context Protocol](https://modelcontextprotocol.io) server for the [Lacuna Music API](https://lacuna.fm). Lets MCP-compatible clients (Claude Desktop, Claude Code, Cursor, Zed, Continue, etc.) generate AI music as part of an agent loop.
 
-> Looking for the SDK or CLI? See [`lacuna-sdk`](../sdk) and [`lacuna-cli`](../cli).
+> Looking for the SDK or CLI? See [`lacuna-sdk`](../sdk) and [`lacuna-toolkit`](../cli).
 
 ---
 

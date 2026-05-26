@@ -7,7 +7,7 @@
  *
  * @example
  * ```ts
- * import { Webhooks } from 'lacuna-cli/webhooks'
+ * import { Webhooks } from 'lacuna-sdk/webhooks'
  *
  * const event = Webhooks.constructEvent(
  *   rawBody, // string — the raw request body, NOT JSON.parse'd
@@ -163,7 +163,7 @@ export const isKeyExpiring = (event: WebhookEvent): event is Extract<WebhookEven
  * Namespaced surface for ergonomic imports:
  *
  * ```ts
- * import { Webhooks } from 'lacuna-cli/webhooks'
+ * import { Webhooks } from 'lacuna-sdk/webhooks'
  * Webhooks.constructEvent(...)
  * ```
  */

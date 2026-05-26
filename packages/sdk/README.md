@@ -12,7 +12,7 @@ Official TypeScript SDK for the [Lacuna Music API](https://lacuna.fm). Generate 
 - Automatic retries with `Retry-After` honoring and exponential backoff
 - Polling helper that waits for terminal task state
 
-> Looking for the command-line tool? See [`lacuna-cli`](../cli). For the MCP server, see [`lacuna-mcp`](../mcp).
+> Looking for the command-line tool? See [`lacuna-toolkit`](../cli). For the MCP server, see [`lacuna-mcp`](../mcp).
 
 ---
 

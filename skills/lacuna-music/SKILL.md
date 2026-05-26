@@ -23,7 +23,7 @@ Three packages, same underlying API. Pick the first that fits the user's environ
 | ------------------------------------------------------------------ | ----------- |
 | Claude Code, Claude Desktop, Cursor, Zed, or another MCP client    | `lacuna-mcp` |
 | A Node / TypeScript script or backend                              | `lacuna-sdk` |
-| Their shell, a CI job, a one-off prompt                            | `lacuna-cli` |
+| Their shell, a CI job, a one-off prompt                            | `lacuna-toolkit` |
 
 ### `lacuna-mcp` (preferred for AI agents)
 
@@ -50,10 +50,10 @@ const finished = await lacuna.music.generations.waitFor(task.id)
 console.log(finished.tracks[0]?.audio_url)
 ```
 
-### `lacuna-cli`
+### `lacuna-toolkit`
 
 ```sh
-npx lacuna-cli music generate \
+npx lacuna-toolkit music generate \
   --style "synthwave, retro drums, 110 bpm" \
   --title "Neon Drive" \
   --instrumental \
@@ -126,6 +126,6 @@ For production workflows, prefer the `job.completed` webhook over polling. See [
 - API and pricing: <https://lacuna.fm>
 - Get an API key: <https://lacuna.fm/profile/api>
 - SDK: [`lacuna-sdk`](https://www.npmjs.com/package/lacuna-sdk)
-- CLI: [`lacuna-cli`](https://www.npmjs.com/package/lacuna-cli)
+- CLI: [`lacuna-toolkit`](https://www.npmjs.com/package/lacuna-toolkit)
 - MCP server: [`lacuna-mcp`](https://www.npmjs.com/package/lacuna-mcp)
 - Source code: <https://github.com/JOYLINK-LTD/lacuna-toolkit>

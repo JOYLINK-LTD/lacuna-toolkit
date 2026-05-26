@@ -1,13 +1,13 @@
 # Lacuna developer tools
 
-[![License: MIT](https://img.shields.io/npm/l/lacuna-cli.svg)](./LICENSE)
+[![License: MIT](https://img.shields.io/npm/l/lacuna-toolkit.svg)](./LICENSE)
 
 Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](https://lacuna.fm). Generate AI music programmatically from any Node 18+ runtime, your shell, an MCP-compatible client, or an AI coding agent that supports the [Agent Skills](https://agentskills.io) standard.
 
 | Surface | Install | Use case |
 | --- | --- | --- |
 | [`lacuna-sdk`](./packages/sdk) | `npm install lacuna-sdk` | TypeScript / JavaScript SDK with webhook verification. |
-| [`lacuna-cli`](./packages/cli) | `npx lacuna-cli` | Command-line interface for one-off generation, scripting, CI. |
+| [`lacuna-toolkit`](./packages/cli) | `npx lacuna-toolkit` | Command-line interface for one-off generation, scripting, CI. |
 | [`lacuna-mcp`](./packages/mcp) | `npx lacuna-mcp` | Model Context Protocol server for Claude Desktop, Claude Code, Cursor, etc. |
 | [`lacuna-music` skill](./skills/lacuna-music) | `npx skills add JOYLINK-LTD/lacuna-toolkit` | Agent Skill for Claude Code, Codex CLI, Cursor, and other tools that follow the [SKILL.md](https://agentskills.io) standard. |
 
@@ -21,7 +21,7 @@ The three npm packages are released together and share the same API surface. The
 .
 ├── packages/
 │   ├── sdk/                   →  npm: lacuna-sdk
-│   ├── cli/                   →  npm: lacuna-cli
+│   ├── cli/                   →  npm: lacuna-toolkit
 │   └── mcp/                   →  npm: lacuna-mcp
 ├── skills/
 │   └── lacuna-music/SKILL.md  →  Agent Skill (skills.sh, skillsmp.com, etc.)
@@ -51,7 +51,7 @@ Each package versions independently from `packages/<pkg>/package.json`. Bump ver
 # bump 0.2.0 → 0.2.1 in all three package.jsons (and packages/sdk/src/version.ts)
 pnpm -r run build
 pnpm --filter lacuna-sdk publish --access public
-pnpm --filter lacuna-cli publish --access public
+pnpm --filter lacuna-toolkit publish --access public
 pnpm --filter lacuna-mcp publish --access public
 ```
 

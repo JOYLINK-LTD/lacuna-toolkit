@@ -76,7 +76,7 @@ const RETRY_BASE_MS = 500
  *
  * @example
  * ```ts
- * import Lacuna from 'lacuna-cli'
+ * import Lacuna from 'lacuna-sdk'
  *
  * const lacuna = new Lacuna({ apiKey: process.env.LACUNA_API_KEY })
  * const task = await lacuna.music.generations.create({
@@ -245,7 +245,7 @@ export class Lacuna {
 function buildUserAgent(): string {
   const node = typeof process !== 'undefined' && process.versions?.node ? process.versions.node : 'unknown'
   const platform = typeof process !== 'undefined' && process.platform ? process.platform : 'unknown'
-  return `lacuna-cli/${VERSION} node/${node} (${platform})`
+  return `lacuna-sdk/${VERSION} node/${node} (${platform})`
 }
 
 function headersToObject(headers: Headers): Record<string, string> {
