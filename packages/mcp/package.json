@@ -1,6 +1,7 @@
 {
   "name": "lacuna-mcp",
-  "version": "0.3.0",
+  "version": "0.3.1",
+  "mcpName": "io.github.JOYLINK-LTD/lacuna-mcp",
   "description": "Model Context Protocol (MCP) server for the Lacuna Music API — generate AI music from MCP-compatible clients like Claude Desktop and Claude Code.",
   "keywords": [
     "lacuna",

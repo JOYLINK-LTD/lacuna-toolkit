@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.JOYLINK-LTD/lacuna-mcp",
+  "description": "Generate AI music via the Lacuna Music API from MCP clients like Claude Desktop & Code.",
+  "repository": {
+    "url": "https://github.com/JOYLINK-LTD/lacuna-toolkit",
+    "source": "github",
+    "subfolder": "packages/mcp"
+  },
+  "version": "0.3.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "lacuna-mcp",
+      "version": "0.3.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "LACUNA_API_KEY",
+          "description": "Lacuna API key from https://lacuna.fm/profile/api",
+          "isRequired": true,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "LACUNA_BASE_URL",
+          "description": "Override the API base URL (optional).",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}
