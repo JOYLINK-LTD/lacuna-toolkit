@@ -1,6 +1,6 @@
 {
   "name": "lacuna-sdk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Official TypeScript SDK for the Lacuna Music API — generate AI music programmatically.",
   "keywords": [
     "lacuna",
@@ -29,14 +29,24 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./webhooks": {
-      "types": "./dist/webhooks.d.ts",
-      "import": "./dist/webhooks.js",
-      "require": "./dist/webhooks.cjs"
+      "import": {
+        "types": "./dist/webhooks.d.ts",
+        "default": "./dist/webhooks.js"
+      },
+      "require": {
+        "types": "./dist/webhooks.d.cts",
+        "default": "./dist/webhooks.cjs"
+      }
     },
     "./package.json": "./package.json"
   },

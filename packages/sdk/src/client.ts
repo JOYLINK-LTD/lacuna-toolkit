@@ -27,7 +27,7 @@ export interface LacunaOptions {
    * Override the API base URL. Useful for staging environments or self-hosted
    * deployments. The path component (`/api/v1`) is included by default.
    *
-   * Defaults to `process.env.LACUNA_BASE_URL` or `https://lacuna.ai/api/v1`.
+   * Defaults to `process.env.LACUNA_BASE_URL` or `https://www.lacuna.fm/api/v1`.
    */
   baseURL?: string
 
@@ -66,7 +66,7 @@ interface RequestOptions {
   headers?: Record<string, string>
 }
 
-const DEFAULT_BASE_URL = 'https://lacuna.ai/api/v1'
+const DEFAULT_BASE_URL = 'https://www.lacuna.fm/api/v1'
 const DEFAULT_TIMEOUT_MS = 60_000
 const DEFAULT_MAX_RETRIES = 2
 const RETRY_BASE_MS = 500

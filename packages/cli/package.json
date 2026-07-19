@@ -1,6 +1,6 @@
 {
   "name": "lacuna-toolkit",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Official command-line interface for the Lacuna Music API.",
   "keywords": [
     "lacuna",

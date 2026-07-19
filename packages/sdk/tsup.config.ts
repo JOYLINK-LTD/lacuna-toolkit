@@ -1,5 +1,7 @@
 import { defineConfig } from 'tsup'
 
+import { version } from './package.json'
+
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
@@ -12,6 +14,10 @@ export default defineConfig({
   clean: true,
   shims: true,
   target: 'node18',
+  // 把 package.json 的版本号烘进产物，src/version.ts 不再手写常量（见那里的注释）
+  define: {
+    __SDK_VERSION__: JSON.stringify(version),
+  },
   outExtension({ format }) {
     return { js: format === 'cjs' ? '.cjs' : '.js' }
   },

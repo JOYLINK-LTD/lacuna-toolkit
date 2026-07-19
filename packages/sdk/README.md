@@ -147,7 +147,7 @@ For long-running production workflows prefer the `job.completed` webhook over po
 ```ts
 const lacuna = new Lacuna({
   apiKey: process.env.LACUNA_API_KEY,
-  baseURL: 'https://lacuna.fm/api/v1', // override for staging
+  baseURL: 'https://www.lacuna.fm/api/v1', // default; override for self-hosted
   timeout: 60_000,                     // ms per request, default 60_000
   maxRetries: 2,                       // retries on 429/5xx (except `model_unavailable`), default 2
   defaultHeaders: { 'X-App-Name': 'my-pipeline' },

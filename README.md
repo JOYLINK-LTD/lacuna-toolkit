@@ -48,7 +48,8 @@ The SDK must be built before `pnpm -r run typecheck` can resolve the CLI/MCP pac
 Each package versions independently from `packages/<pkg>/package.json`. Bump versions in lockstep, build, then publish:
 
 ```sh
-# bump 0.2.0 → 0.2.1 in all three package.jsons (and packages/sdk/src/version.ts)
+# bump the version in all three package.jsons + packages/mcp/server.json
+# (packages/sdk/src/version.ts is injected from package.json at build time — do not hand-edit)
 pnpm -r run build
 pnpm --filter lacuna-sdk publish --access public
 pnpm --filter lacuna-toolkit publish --access public
