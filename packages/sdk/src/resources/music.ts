@@ -33,13 +33,14 @@ export class GenerationsResource {
       method: 'POST',
       path: '/music/generations',
       body: params,
+      maxRetries: 0,
     })
   }
 
   /**
    * Fetch the current state of a generation task.
    *
-   * Inexpensive — call as often as you like; rate limited per API key.
+   * Use {@link waitFor} when you want the SDK to poll at the standard cadence.
    */
   async retrieve(id: string): Promise<GenerationTask> {
     return this.client.request<GenerationTask>({

@@ -73,13 +73,13 @@ lacuna music generate \
 | `--title <text>`           | Required. Track title.                                         |
 | `--lyrics <text>`          | Inline lyrics.                                                 |
 | `--lyrics-file <path>`     | Read lyrics from a UTF-8 file.                                 |
-| `--instrumental`           | Skip lyrics. Mutually exclusive with `--lyrics`.               |
-| `--model <name>`           | Generation model. Defaults to `aether`.                        |
-| `--vocal-gender <m\|f>`    | Lead vocal hint.                                               |
-| `--negative-tags <text>`   | Style tags to avoid.                                           |
-| `--style-weight <0-1>`     |                                                                |
-| `--weirdness-constraint`   |                                                                |
-| `--audio-weight <0-1>`     |                                                                |
+| `--instrumental`           | Generate an instrumental track.                                |
+| `--model <aether\|echo>`   | Generation model. Defaults to `aether`.                        |
+| `--vocal-gender <m\|f>`    | Lead vocal hint (`aether` only).                               |
+| `--negative-tags <text>`   | Style tags to avoid (`aether` only).                           |
+| `--style-weight <0-1>`     | `aether` only.                                                 |
+| `--weirdness-constraint`   | `aether` only.                                                 |
+| `--audio-weight <0-1>`     | `aether` only.                                                 |
 | `--wait`                   | Poll until the task reaches a terminal state.                  |
 | `--poll-interval <secs>`   | Polling interval (with `--wait`). Default 5.                   |
 | `--timeout <secs>`         | Polling timeout (with `--wait`). Default 600.                  |

@@ -161,7 +161,7 @@ export class ServiceUnavailableError extends APIError {
  *   if (err instanceof ModelUnavailableError) {
  *     // err.model — which model is currently down ('aether' here)
  *     // err.retryAfterSeconds — server's suggested cool-down
- *     // pick a different model (e.g. 'echo' / 'nocturne') and retry
+ *     // pick a different available model and retry
  *   }
  * }
  * ```

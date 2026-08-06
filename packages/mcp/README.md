@@ -82,12 +82,12 @@ Any client that speaks the Model Context Protocol over stdio can run `npx -y lac
 | `title`                | `string` *(required)*               | Track title.                                                         |
 | `lyrics`               | `string`                            | Required unless `instrumental` is `true`.                            |
 | `instrumental`         | `boolean`                           | Generate an instrumental track. Default `false`.                     |
-| `model`                | `"aether"`                          | Generation model. Defaults to `aether` (Lacuna Aether).              |
-| `vocal_gender`         | `"m" \| "f"`                        | Lead vocal hint.                                                     |
-| `negative_tags`        | `string`                            | Style tags to avoid.                                                 |
-| `style_weight`         | `number` (0–1)                      |                                                                      |
-| `weirdness_constraint` | `number` (0–1)                      |                                                                      |
-| `audio_weight`         | `number` (0–1)                      |                                                                      |
+| `model`                | `"aether" \| "echo"`               | Generation model. Defaults to `aether` (Lacuna Aether).              |
+| `vocal_gender`         | `"m" \| "f"`                        | Lead vocal hint (`aether` only).                                     |
+| `negative_tags`        | `string`                            | Style tags to avoid (`aether` only).                                 |
+| `style_weight`         | `number` (0–1)                      | `aether` only.                                                       |
+| `weirdness_constraint` | `number` (0–1)                      | `aether` only.                                                       |
+| `audio_weight`         | `number` (0–1)                      | `aether` only.                                                       |
 
 Credits are deducted on creation and refunded automatically if the upstream provider fails.
 

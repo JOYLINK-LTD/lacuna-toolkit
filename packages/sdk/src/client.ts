@@ -35,10 +35,14 @@ export interface LacunaOptions {
   timeout?: number
 
   /**
-   * Maximum number of automatic retries for `429` and `5xx` responses.
+   * Maximum number of automatic retries for idempotent `GET` requests that
+   * fail because of a connection error, timeout, `429`, or `5xx` response.
    *
    * Backoff respects the server's `Retry-After` header when present and falls
    * back to exponential backoff (500ms × 2^attempt, jittered).
+   *
+   * Generation `POST` requests are not retried automatically because retrying
+   * could create and charge for a duplicate task.
    *
    * Defaults to `2`. Set to `0` to disable retries.
    */
@@ -137,7 +141,7 @@ export class Lacuna {
    */
   async request<T>(opts: RequestOptions): Promise<T> {
     const url = this.buildURL(opts.path, opts.query)
-    const maxRetries = opts.maxRetries ?? this.maxRetries
+    const maxRetries = opts.maxRetries ?? (opts.method === 'GET' ? this.maxRetries : 0)
     const timeout = opts.timeout ?? this.timeout
 
     const headers: Record<string, string> = {

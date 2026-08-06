@@ -10,3 +10,5 @@ coverage
 .turbo
 .npm
 *.tsbuildinfo
+mcpb-build
+*.mcpb

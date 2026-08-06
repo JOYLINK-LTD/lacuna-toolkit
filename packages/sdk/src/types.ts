@@ -8,15 +8,19 @@
 /**
  * Generation model identifier.
  *
- * Codenames:
- *   - `aether`    — Lacuna Aether (default, versatile flagship)
- *   - `echo`      — Lacuna Echo (fast, duration-controlled, 5–240s)
- *   - `nocturne`  — Lacuna Nocturne (premium vocal & emotion)
+ * Models offered for new generations:
+ *   - `aether` — Lacuna Aether (default, general purpose)
+ *   - `echo`   — Lacuna Echo (full structured tracks up to three minutes)
  *
  * The `string & {}` fallback keeps untyped values usable so callers don't have
  * to wait for an SDK release to opt in to a new model.
  */
-export type Model = 'aether' | 'echo' | 'nocturne' | (string & {})
+export type SelectableModel = 'aether' | 'echo'
+
+/** @deprecated Retained only so existing integrations continue to compile. */
+export type DeprecatedModel = 'nocturne'
+
+export type Model = SelectableModel | DeprecatedModel | (string & {})
 
 /** Lead vocal gender hint. */
 export type VocalGender = 'm' | 'f'
@@ -88,8 +92,6 @@ export interface CreateGenerationParams {
   weirdness_constraint?: number
   /** 0–1, weight of audio reference (aether only). */
   audio_weight?: number
-  /** Target track duration in seconds, 5–240 (echo only). */
-  duration?: number
 }
 
 /** Common envelope shared by every webhook event. */

@@ -1,6 +1,6 @@
 {
   "name": "lacuna-sdk",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Official TypeScript SDK for the Lacuna Music API — generate AI music programmatically.",
   "keywords": [
     "lacuna",
@@ -61,6 +61,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
+    "test": "node --test test/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm run build"
   },

@@ -75,23 +75,21 @@ Music API access requires a **Pro** plan or above. Lower tiers receive `403 perm
 | `title`                | yes                     | all                | Track title.                                                            |
 | `lyrics`               | yes if not instrumental | all                | Plain text, up to 5000 chars. Use `[Verse]` / `[Chorus]` markers.       |
 | `instrumental`         | no                      | all                | `true` skips lyrics.                                                    |
-| `model`                | no                      | all                | `aether` (default), `echo`, or `nocturne`. See model table below.       |
+| `model`                | no                      | all                | `aether` (default) or `echo`. See model table below.                     |
 | `vocal_gender`         | no                      | aether             | `'m'` or `'f'` — lead vocal hint.                                       |
 | `negative_tags`        | no                      | aether             | Style tags to avoid.                                                    |
 | `style_weight`         | no                      | aether             | 0–1.                                                                    |
 | `weirdness_constraint` | no                      | aether             | 0–1.                                                                    |
 | `audio_weight`         | no                      | aether             | 0–1.                                                                    |
-| `duration`             | no                      | echo               | Target track length in seconds, 5–240. Default 60.                      |
 
-The API rejects model-incompatible fields with `400 invalid_param` (e.g. passing `duration` with `model: 'aether'`).
+The API rejects model-incompatible fields with `400 invalid_param` (e.g. passing `style_weight` with `model: 'echo'`).
 
 ### Models
 
-| Codename   | Best for                                                            | Notes                                                                  |
-| ---------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `aether`   | Default. General-purpose, supports vocals + advanced weight knobs.  | Only model that supports `extend` / `cover` / `replace` operations.    |
-| `echo`     | Short clips, BGM stingers, fast iteration with controllable length. | Use `duration` (5–240s). No vocal-gender / weight knobs.               |
-| `nocturne` | High-quality vocals and emotional expression — quality over speed.  | Style description carries vocal/BPM hints; no separate knobs.          |
+| Codename | Best for                                                           | Notes                                                               |
+| -------- | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `aether` | Default. General-purpose, supports vocals + advanced weight knobs. | Supports vocal-gender and weight controls.                          |
+| `echo`   | Full structured tracks up to three minutes.                        | Length is model-determined; no vocal-gender / weight knobs.         |
 
 ## Lifecycle
 
@@ -105,19 +103,18 @@ For production workflows, prefer the `job.completed` webhook over polling. See [
 
 ## Credits and pricing
 
-- Default cost is ~50 credits per request — confirm on the [pricing page](https://lacuna.fm/pricing).
+- Cost depends on the selected model — confirm on the [pricing page](https://lacuna.fm/pricing).
 - Failed generations refund automatically.
 - If a request returns `402 insufficient_credits`, do not retry — tell the user to top up.
 
 ## Working with `audio_url`
 
-`audio_url` is a CDN URL valid for roughly 24 hours. If the output needs to persist (e.g., the user is embedding it into a long-lived asset), copy the bytes to durable storage immediately rather than referencing the CDN URL.
+`audio_url` points to the generated output on Lacuna's CDN and does not have a 24-hour expiry. Downloading a separate copy is optional and depends on the user's own storage or processing workflow.
 
 ## Constraints to respect
 
-- Don't poll faster than every 5 seconds — the API rate-limits aggressive polling.
+- Use the default 5-second polling interval unless the workflow has a specific reason to change it.
 - Don't hardcode API keys; always read from `LACUNA_API_KEY`.
-- Don't assume `audio_url` is permanent — see above.
 - Don't retry on `403 tier_insufficient` or `402 insufficient_credits` — these are user-action errors.
 - On `503 model_unavailable`, the requested model is temporarily circuit-broken (`error.model` names which one). Switch to a different model and retry; do not loop on the same one. The SDK does **not** auto-fallback because each model has a different credit cost.
 

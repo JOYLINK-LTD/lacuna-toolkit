@@ -9,7 +9,7 @@ Official TypeScript SDK for the [Lacuna Music API](https://lacuna.fm). Generate 
 - Fully typed against the published OpenAPI spec
 - Works in Node, Bun, and Deno (via npm)
 - Webhook signature verification with constant-time comparison
-- Automatic retries with `Retry-After` honoring and exponential backoff
+- Automatic retries for idempotent reads, with `Retry-After` honoring and exponential backoff
 - Polling helper that waits for terminal task state
 
 > Looking for the command-line tool? See [`lacuna-toolkit`](../cli). For the MCP server, see [`lacuna-mcp`](../mcp).
@@ -99,14 +99,14 @@ task.status  // 'pending'
 | `title`                | `string` *(required)*      | Up to 200 chars.                                                 |
 | `lyrics`               | `string`                   | Required unless `instrumental: true`. Up to 5000 chars.          |
 | `instrumental`         | `boolean`                  | Default `false`.                                                 |
-| `model`                | `'aether'`                 | Default `aether` (Lacuna Aether).                                |
-| `vocal_gender`         | `'m' \| 'f'`               | Lead vocal hint.                                                 |
-| `negative_tags`        | `string`                   | Style tags to avoid.                                             |
-| `style_weight`         | `number` (0–1)             |                                                                  |
-| `weirdness_constraint` | `number` (0–1)             |                                                                  |
-| `audio_weight`         | `number` (0–1)             |                                                                  |
+| `model`                | `'aether' \| 'echo'`        | Default `aether` (Lacuna Aether).                                |
+| `vocal_gender`         | `'m' \| 'f'`               | Lead vocal hint (`aether` only).                                 |
+| `negative_tags`        | `string`                   | Style tags to avoid (`aether` only).                             |
+| `style_weight`         | `number` (0–1)             | `aether` only.                                                   |
+| `weirdness_constraint` | `number` (0–1)             | `aether` only.                                                   |
+| `audio_weight`         | `number` (0–1)             | `aether` only.                                                   |
 
-Credits are deducted on this call and refunded automatically if the upstream provider fails. The default cost is 50 credits per request — see [pricing](https://lacuna.fm/pricing).
+Credits are deducted on this call and refunded automatically if the upstream provider fails. Cost depends on the selected model — see [pricing](https://lacuna.fm/pricing).
 
 ### Retrieving a generation
 
@@ -121,6 +121,8 @@ if (task.status === 'ready') {
 ```
 
 `status` is one of `'pending' | 'ready' | 'failed'`. A `failed` task is a normal outcome — inspect `task.error` for the reason; credits are refunded automatically.
+
+`audio_url` points to the generated output on Lacuna's CDN and does not have a 24-hour expiry.
 
 ### Waiting for completion
 
@@ -149,13 +151,13 @@ const lacuna = new Lacuna({
   apiKey: process.env.LACUNA_API_KEY,
   baseURL: 'https://www.lacuna.fm/api/v1', // default; override for self-hosted
   timeout: 60_000,                     // ms per request, default 60_000
-  maxRetries: 2,                       // retries on 429/5xx (except `model_unavailable`), default 2
+  maxRetries: 2,                       // retries idempotent GET failures, default 2
   defaultHeaders: { 'X-App-Name': 'my-pipeline' },
   fetch: customFetch,                  // custom fetch impl (proxy, instrumentation)
 })
 ```
 
-Retries use the server's `Retry-After` header when present, falling back to jittered exponential backoff (`500ms × 2^attempt`).
+GET retries cover connection errors, timeouts, `429`, and `5xx` responses. They use the server's `Retry-After` header when present, falling back to jittered exponential backoff (`500ms × 2^attempt`). Generation POST requests are never retried automatically, because replaying one could create and charge for a duplicate task.
 
 ---
 
