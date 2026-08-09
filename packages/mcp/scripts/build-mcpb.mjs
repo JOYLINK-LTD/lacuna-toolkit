@@ -54,23 +54,9 @@ const manifest = {
       },
     },
   },
-  tools: [
-    {
-      name: 'generate_music',
-      description:
-        'Create an AI music generation task on Lacuna. Returns immediately with a pending task.',
-    },
-    {
-      name: 'get_generation',
-      description: 'Retrieve the current state of a music generation task by id.',
-    },
-    {
-      name: 'wait_for_generation',
-      description:
-        'Poll a generation task until it is ready or failed, then return the final track URLs.',
-    },
-  ],
-  tools_generated: false,
+  // Clients discover the full JSON tool schemas at runtime. Omitting abbreviated
+  // declarations prevents registries from treating them as complete server-card tools.
+  tools_generated: true,
   keywords: pkg.keywords,
   license: pkg.license,
   repository: {
