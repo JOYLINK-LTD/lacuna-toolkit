@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/npm/l/lacuna-sdk.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/node/v/lacuna-sdk.svg)](https://nodejs.org)
 
-Official TypeScript SDK for the [Lacuna Music API](https://lacuna.fm). Generate AI music programmatically, await results, and verify webhooks from any Node 18+ runtime.
+Official TypeScript SDK for the [Lacuna Music API](https://www.lacuna.fm). Generate AI music programmatically, await results, and verify webhooks from any Node 18+ runtime.
 
 - Fully typed against the published OpenAPI spec
 - Works in Node, Bun, and Deno (via npm)
@@ -62,7 +62,7 @@ console.log(finished.tracks[0]?.audio_url)
 
 ## Authentication
 
-Generate an API key from your [Lacuna profile dashboard](https://lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
+Generate an API key from your [Lacuna profile dashboard](https://www.lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
 
 The SDK reads the key from one of two sources, in order:
 
@@ -106,7 +106,7 @@ task.status  // 'pending'
 | `weirdness_constraint` | `number` (0–1)             | `aether` only.                                                   |
 | `audio_weight`         | `number` (0–1)             | `aether` only.                                                   |
 
-Credits are deducted on this call and refunded automatically if the upstream provider fails. Cost depends on the selected model — see [pricing](https://lacuna.fm/pricing).
+Credits are deducted on this call and refunded automatically if the upstream provider fails. Cost depends on the selected model — see [pricing](https://www.lacuna.fm/pricing).
 
 ### Retrieving a generation
 

@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/npm/l/lacuna-toolkit.svg)](./LICENSE)
 
-Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](https://lacuna.fm). Generate AI music programmatically from any Node 18+ runtime, your shell, an MCP-compatible client, or an AI coding agent that supports the [Agent Skills](https://agentskills.io) standard.
+Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](https://www.lacuna.fm). Generate AI music programmatically from any Node 18+ runtime, your shell, an MCP-compatible client, or an AI coding agent that supports the [Agent Skills](https://agentskills.io) standard.
 
 | Surface | Install | Use case |
 | --- | --- | --- |

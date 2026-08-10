@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/npm/l/lacuna-toolkit.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/node/v/lacuna-toolkit.svg)](https://nodejs.org)
 
-Official command-line interface for the [Lacuna Music API](https://lacuna.fm). Generate AI music from a shell — for one-off prompts, scripting, or CI.
+Official command-line interface for the [Lacuna Music API](https://www.lacuna.fm). Generate AI music from a shell — for one-off prompts, scripting, or CI.
 
 > For programmatic use from TypeScript or JavaScript, install [`lacuna-sdk`](../sdk) instead. For an MCP server, see [`lacuna-mcp`](../mcp).
 
@@ -35,7 +35,7 @@ lacuna --version
 
 ## Authentication
 
-Generate an API key from your [Lacuna profile dashboard](https://lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
+Generate an API key from your [Lacuna profile dashboard](https://www.lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
 
 The CLI reads the key from one of three sources, in order:
 

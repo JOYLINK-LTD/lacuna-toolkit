@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/npm/l/lacuna-mcp.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/node/v/lacuna-mcp.svg)](https://nodejs.org)
 
-[Model Context Protocol](https://modelcontextprotocol.io) server for the [Lacuna Music API](https://lacuna.fm). Lets MCP-compatible clients (Claude Desktop, Claude Code, Cursor, Zed, Continue, etc.) generate AI music as part of an agent loop.
+[Model Context Protocol](https://modelcontextprotocol.io) server for the [Lacuna Music API](https://www.lacuna.fm). Lets MCP-compatible clients (Claude Desktop, Claude Code, Cursor, Zed, Continue, etc.) generate AI music as part of an agent loop.
 
 > Looking for the SDK or CLI? See [`lacuna-sdk`](../sdk) and [`lacuna-toolkit`](../cli).
 
@@ -24,7 +24,7 @@ The server reads its configuration from environment variables:
 
 | Variable           | Required | Description                                                                 |
 | ------------------ | -------- | --------------------------------------------------------------------------- |
-| `LACUNA_API_KEY`   | yes      | API key from [your profile dashboard](https://lacuna.fm/profile/api). Begins with `lyr_live_`. |
+| `LACUNA_API_KEY`   | yes      | API key from [your profile dashboard](https://www.lacuna.fm/profile/api). Begins with `lyr_live_`. |
 | `LACUNA_BASE_URL`  | no       | Override the API base URL (e.g. for staging).                               |
 
 Music API access requires the **Pro** plan or above.
