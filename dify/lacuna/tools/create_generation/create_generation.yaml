@@ -1,0 +1,147 @@
+identity:
+  name: create_generation
+  author: lacuna
+  label:
+    en_US: Create generation (async)
+    zh_Hans: Create generation (async)
+    ja_JP: Create generation (async)
+    pt_BR: Create generation (async)
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Queue a generation and return the task id right away, without waiting for the audio.
+    zh_Hans: Queue a generation and return the task id right away, without waiting for the audio.
+    ja_JP: Queue a generation and return the task id right away, without waiting for the audio.
+    pt_BR: Queue a generation and return the task id right away, without waiting for the audio.
+  llm: >-
+    Queue a music generation and return immediately with the task id, without waiting for the audio.
+    Use this when the workflow should not block for several minutes — pair it with the get_generation
+    tool, or with a job.completed webhook. Credits are deducted at queue time and refunded if the task fails.
+
+parameters:
+  - name: style
+    type: string
+    required: true
+    label:
+      en_US: Style
+      zh_Hans: Style
+    human_description:
+      en_US: "Genre, instrumentation, mood and tempo, e.g. 'synthwave, analog pads, 110 bpm, neon'."
+      zh_Hans: "Genre, instrumentation, mood and tempo, e.g. 'synthwave, analog pads, 110 bpm, neon'."
+    llm_description: Free-text description of the music to produce, up to 1000 characters.
+    form: llm
+
+  - name: title
+    type: string
+    required: true
+    label:
+      en_US: Title
+      zh_Hans: Title
+    human_description:
+      en_US: A short name for the track.
+      zh_Hans: A short name for the track.
+    llm_description: A short title for the generated track, up to 200 characters.
+    form: llm
+
+  - name: instrumental
+    type: boolean
+    required: false
+    default: true
+    label:
+      en_US: Instrumental
+      zh_Hans: Instrumental
+    human_description:
+      en_US: Produce music with no vocals. Turn this off and supply lyrics to get a sung track.
+      zh_Hans: Produce music with no vocals. Turn this off and supply lyrics to get a sung track.
+    llm_description: True produces music with no vocals. False produces a sung track and requires lyrics.
+    form: llm
+
+  - name: lyrics
+    type: string
+    required: false
+    label:
+      en_US: Lyrics
+      zh_Hans: Lyrics
+    human_description:
+      en_US: Required when Instrumental is off. Section tags such as [Verse] and [Chorus] are supported.
+      zh_Hans: Required when Instrumental is off. Section tags such as [Verse] and [Chorus] are supported.
+    llm_description: Lyrics to sing, up to 5000 characters. Required when instrumental is false.
+    form: llm
+
+  - name: model
+    type: select
+    required: false
+    default: aether
+    options:
+      - value: aether
+        label:
+          en_US: Aether — two takes per request, widest style range
+          zh_Hans: Aether — two takes per request, widest style range
+      - value: echo
+        label:
+          en_US: Echo — one take, full song structure up to three minutes
+          zh_Hans: Echo — one take, full song structure up to three minutes
+    label:
+      en_US: Model
+      zh_Hans: Model
+    human_description:
+      en_US: >-
+        Aether returns two takes per request and accepts the vocal gender and negative tag controls.
+        Echo returns a single take with a complete song structure of up to three minutes.
+      zh_Hans: >-
+        Aether returns two takes per request and accepts the vocal gender and negative tag controls.
+        Echo returns a single take with a complete song structure of up to three minutes.
+    llm_description: >-
+      Generation model, "aether" or "echo". Only aether accepts vocal_gender and negative_tags.
+    form: form
+
+  - name: vocal_gender
+    type: select
+    required: false
+    options:
+      - value: f
+        label:
+          en_US: Female
+          zh_Hans: Female
+      - value: m
+        label:
+          en_US: Male
+          zh_Hans: Male
+    label:
+      en_US: Vocal gender
+      zh_Hans: Vocal gender
+    human_description:
+      en_US: Preferred lead vocal register. Applies to the Aether model and to vocal tracks only.
+      zh_Hans: Preferred lead vocal register. Applies to the Aether model and to vocal tracks only.
+    llm_description: Preferred lead vocal register, "f" or "m". Only sent when the model is aether.
+    form: llm
+
+  - name: negative_tags
+    type: string
+    required: false
+    label:
+      en_US: Negative tags
+      zh_Hans: Negative tags
+    human_description:
+      en_US: "Styles or elements to steer away from, e.g. 'heavy distortion, screaming'. Aether only."
+      zh_Hans: "Styles or elements to steer away from, e.g. 'heavy distortion, screaming'. Aether only."
+    llm_description: Comma-separated styles the track should avoid, up to 500 characters. Aether only.
+    form: llm
+
+output_schema:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Generation task id. Pass this to the get_generation tool.
+    status:
+      type: string
+      description: "pending immediately after queueing."
+    credits_used:
+      type: number
+      description: Credits deducted for this generation.
+
+extra:
+  python:
+    source: tools/create_generation/create_generation.py
