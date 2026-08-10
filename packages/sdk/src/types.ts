@@ -22,6 +22,36 @@ export type DeprecatedModel = 'nocturne'
 
 export type Model = SelectableModel | DeprecatedModel | (string & {})
 
+/** Subscription plan, lowercased. */
+export type Plan = 'free' | 'basic' | 'pro' | 'ultra'
+
+/** The account behind the current credential. Returned by `client.account.retrieve()`. */
+export interface Account {
+  id: string
+  plan: Plan
+  credits: {
+    /** Spent before `onetime`. */
+    subscription: number
+    onetime: number
+    total: number
+  }
+  rate_limits: {
+    requests_per_minute: number
+    /** In-flight generation tasks allowed at once. */
+    concurrent_generations: number
+  }
+  auth: {
+    kind: 'api_key' | 'oauth'
+    scopes: string[]
+    /** Null when `kind` is `oauth`. */
+    key: {
+      id: string
+      name: string
+      expires_at: string | null
+    } | null
+  }
+}
+
 /** Lead vocal gender hint. */
 export type VocalGender = 'm' | 'f'
 

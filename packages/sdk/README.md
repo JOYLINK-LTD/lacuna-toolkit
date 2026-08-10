@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/npm/l/lacuna-sdk.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/node/v/lacuna-sdk.svg)](https://nodejs.org)
 
-Official TypeScript SDK for the [Lacuna Music API](https://lacuna.fm). Generate AI music programmatically, await results, and verify webhooks from any Node 18+ runtime.
+Official TypeScript SDK for the [Lacuna Music API](https://www.lacuna.fm). Generate AI music programmatically, await results, and verify webhooks from any Node 18+ runtime.
 
 - Fully typed against the published OpenAPI spec
 - Works in Node, Bun, and Deno (via npm)
@@ -22,6 +22,7 @@ Official TypeScript SDK for the [Lacuna Music API](https://lacuna.fm). Generate 
 - [Quickstart](#quickstart)
 - [Authentication](#authentication)
 - [SDK reference](#sdk-reference)
+  - [Retrieving the account](#retrieving-the-account)
   - [Creating a generation](#creating-a-generation)
   - [Retrieving a generation](#retrieving-a-generation)
   - [Waiting for completion](#waiting-for-completion)
@@ -62,7 +63,7 @@ console.log(finished.tracks[0]?.audio_url)
 
 ## Authentication
 
-Generate an API key from your [Lacuna profile dashboard](https://lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
+Generate an API key from your [Lacuna profile dashboard](https://www.lacuna.fm/profile/api). Keys begin with `lyr_live_` and are shown once at creation — store them in a secrets manager.
 
 The SDK reads the key from one of two sources, in order:
 
@@ -75,9 +76,33 @@ const lacuna = new Lacuna({ apiKey: process.env.LACUNA_API_KEY })
 
 Music API access requires the **Pro** plan or above. Requests from lower tiers receive `403 permission_error / tier_insufficient`.
 
+To check a key without spending anything, read the account:
+
+```ts
+const account = await lacuna.account.retrieve()
+console.log(account.plan, account.credits.total)
+```
+
+`account.retrieve()` is free and is the endpoint to point a connection test at — it is the only authenticated call that answers `200` without needing an existing task id or consuming credits.
+
 ---
 
 ## SDK reference
+
+### Retrieving the account
+
+```ts
+const account = await lacuna.account.retrieve()
+// {
+//   id: 'cm...',
+//   plan: 'pro',
+//   credits: { subscription: 1200, onetime: 300, total: 1500 },
+//   rate_limits: { requests_per_minute: 60, concurrent_generations: 10 },
+//   auth: { kind: 'api_key', scopes: ['music:generate'], key: { id, name, expires_at } },
+// }
+```
+
+No email or other personal data is returned — connection-test responses tend to end up in third-party logs.
 
 ### Creating a generation
 
@@ -106,7 +131,7 @@ task.status  // 'pending'
 | `weirdness_constraint` | `number` (0–1)             | `aether` only.                                                   |
 | `audio_weight`         | `number` (0–1)             | `aether` only.                                                   |
 
-Credits are deducted on this call and refunded automatically if the upstream provider fails. Cost depends on the selected model — see [pricing](https://lacuna.fm/pricing).
+Credits are deducted on this call and refunded automatically if the upstream provider fails. Cost depends on the selected model — see [pricing](https://www.lacuna.fm/pricing).
 
 ### Retrieving a generation
 

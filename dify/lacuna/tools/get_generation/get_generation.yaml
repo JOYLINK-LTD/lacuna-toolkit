@@ -1,0 +1,67 @@
+identity:
+  name: get_generation
+  author: lacuna
+  label:
+    en_US: Get generation
+    zh_Hans: Get generation
+    ja_JP: Get generation
+    pt_BR: Get generation
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Look up a generation task by id and return its status and any finished audio URLs.
+    zh_Hans: Look up a generation task by id and return its status and any finished audio URLs.
+    ja_JP: Look up a generation task by id and return its status and any finished audio URLs.
+    pt_BR: Look up a generation task by id and return its status and any finished audio URLs.
+  llm: >-
+    Retrieve a music generation task by its id and report whether it is still running, ready or failed.
+    When it is ready the response carries the hosted audio URLs. This call is free and does not consume credits.
+
+parameters:
+  - name: task_id
+    type: string
+    required: true
+    label:
+      en_US: Task ID
+      zh_Hans: Task ID
+    human_description:
+      en_US: The id returned by the Create generation tool.
+      zh_Hans: The id returned by the Create generation tool.
+    llm_description: The generation task id returned by create_generation or generate_music.
+    form: llm
+
+output_schema:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Generation task id.
+    status:
+      type: string
+      description: "One of pending, ready or failed."
+    credits_used:
+      type: number
+    credits_refunded:
+      type: number
+      description: Non-zero when the task failed and credits were returned.
+    tracks:
+      type: array
+      description: Generated tracks with their hosted audio URLs.
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          audio_url:
+            type: string
+          duration:
+            type: number
+          title:
+            type: string
+          image_url:
+            type: string
+
+extra:
+  python:
+    source: tools/get_generation/get_generation.py

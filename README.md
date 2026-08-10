@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/npm/l/lacuna-toolkit.svg)](./LICENSE)
 
-Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](https://lacuna.fm). Generate AI music programmatically from any Node 18+ runtime, your shell, an MCP-compatible client, or an AI coding agent that supports the [Agent Skills](https://agentskills.io) standard.
+Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](https://www.lacuna.fm). Generate AI music programmatically from any Node 18+ runtime, your shell, an MCP-compatible client, or an AI coding agent that supports the [Agent Skills](https://agentskills.io) standard.
 
 | Surface | Install | Use case |
 | --- | --- | --- |
@@ -10,6 +10,7 @@ Open-source SDK, CLI, MCP server, and Agent Skill for the [Lacuna Music API](htt
 | [`lacuna-toolkit`](./packages/cli) | `npx lacuna-toolkit` | Command-line interface for one-off generation, scripting, CI. |
 | [`lacuna-mcp`](./packages/mcp) | `npx lacuna-mcp` | Model Context Protocol server for Claude Desktop, Claude Code, Cursor, etc. |
 | [`lacuna-music` skill](./skills/lacuna-music) | `npx skills add JOYLINK-LTD/lacuna-toolkit` | Agent Skill for Claude Code, Codex CLI, Cursor, and other tools that follow the [SKILL.md](https://agentskills.io) standard. |
+| [Dify plugin](./dify/lacuna) | Dify Marketplace → `Lacuna Music` | Tool plugin for Dify workflows and agents. |
 
 The three npm packages are released together and share the same API surface. The skill is markdown-only and tracks the latest published packages.
 

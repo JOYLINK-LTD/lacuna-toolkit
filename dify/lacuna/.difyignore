@@ -1,0 +1,40 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging / build state
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Environments
+.env
+.env.*
+.venv
+venv/
+ENV/
+
+# Caches
+.cache
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+
+# Git & CI
+.git/
+.gitignore
+.github/
+
+# Editors
+.idea/
+.vscode/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Built packages — never ship a package inside a package
+*.difypkg

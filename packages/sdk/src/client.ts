@@ -9,6 +9,7 @@ import {
   RateLimitError,
   createAPIError,
 } from './errors'
+import { AccountResource } from './resources/account'
 import { MusicResource } from './resources/music'
 import { VERSION } from './version'
 
@@ -103,6 +104,7 @@ export class Lacuna {
 
   /** Music generation endpoints. */
   readonly music: MusicResource
+  readonly account: AccountResource
 
   constructor(options: LacunaOptions = {}) {
     const apiKey = options.apiKey ?? process.env.LACUNA_API_KEY ?? ''
@@ -130,6 +132,7 @@ export class Lacuna {
     this.fetchImpl = fetchImpl
 
     this.music = new MusicResource(this)
+    this.account = new AccountResource(this)
   }
 
   /**

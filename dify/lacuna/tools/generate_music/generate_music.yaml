@@ -1,0 +1,192 @@
+identity:
+  name: generate_music
+  author: lacuna
+  label:
+    en_US: Generate music
+    zh_Hans: Generate music
+    ja_JP: Generate music
+    pt_BR: Generate music
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Generate a track from a style description and wait until the audio is ready. Returns hosted MP3 URLs.
+    zh_Hans: Generate a track from a style description and wait until the audio is ready. Returns hosted MP3 URLs.
+    ja_JP: Generate a track from a style description and wait until the audio is ready. Returns hosted MP3 URLs.
+    pt_BR: Generate a track from a style description and wait until the audio is ready. Returns hosted MP3 URLs.
+  llm: >-
+    Generate an original piece of music and block until it is ready, then return the hosted audio URLs.
+    Use this for background music and soundtrack beds for video, podcast, game or ad workflows, and for
+    full vocal songs when lyrics are supplied. Set instrumental to true for music with no vocals. The
+    call takes a few minutes and consumes credits on the caller's Lacuna account.
+
+parameters:
+  - name: style
+    type: string
+    required: true
+    label:
+      en_US: Style
+      zh_Hans: Style
+    human_description:
+      en_US: "Genre, instrumentation, mood and tempo, e.g. 'lofi hip hop, mellow piano, 70 bpm, rainy'."
+      zh_Hans: "Genre, instrumentation, mood and tempo, e.g. 'lofi hip hop, mellow piano, 70 bpm, rainy'."
+    llm_description: >-
+      Free-text description of the music to produce. Combine genre, instrumentation, mood and tempo,
+      for example "cinematic orchestral, strings and timpani, 90 bpm, rising tension". Up to 1000 characters.
+    form: llm
+
+  - name: title
+    type: string
+    required: true
+    label:
+      en_US: Title
+      zh_Hans: Title
+    human_description:
+      en_US: A short name for the track.
+      zh_Hans: A short name for the track.
+    llm_description: A short title for the generated track, up to 200 characters.
+    form: llm
+
+  - name: instrumental
+    type: boolean
+    required: false
+    default: true
+    label:
+      en_US: Instrumental
+      zh_Hans: Instrumental
+    human_description:
+      en_US: Produce music with no vocals. Turn this off and supply lyrics to get a sung track.
+      zh_Hans: Produce music with no vocals. Turn this off and supply lyrics to get a sung track.
+    llm_description: >-
+      True produces music with no vocals, which is what background and soundtrack use cases normally want.
+      False produces a sung track and then lyrics are required.
+    form: llm
+
+  - name: lyrics
+    type: string
+    required: false
+    label:
+      en_US: Lyrics
+      zh_Hans: Lyrics
+    human_description:
+      en_US: Required when Instrumental is off. Section tags such as [Verse] and [Chorus] are supported.
+      zh_Hans: Required when Instrumental is off. Section tags such as [Verse] and [Chorus] are supported.
+    llm_description: >-
+      Lyrics to sing, up to 5000 characters. Required when instrumental is false and ignored otherwise.
+      Structure them with section tags on their own lines, such as [Verse], [Chorus] and [Bridge].
+    form: llm
+
+  - name: model
+    type: select
+    required: false
+    default: aether
+    options:
+      - value: aether
+        label:
+          en_US: Aether — two takes per request, widest style range
+          zh_Hans: Aether — two takes per request, widest style range
+      - value: echo
+        label:
+          en_US: Echo — one take, full song structure up to three minutes
+          zh_Hans: Echo — one take, full song structure up to three minutes
+    label:
+      en_US: Model
+      zh_Hans: Model
+    human_description:
+      en_US: >-
+        Aether returns two takes per request and accepts the vocal gender and negative tag controls.
+        Echo returns a single take with a complete song structure of up to three minutes.
+      zh_Hans: >-
+        Aether returns two takes per request and accepts the vocal gender and negative tag controls.
+        Echo returns a single take with a complete song structure of up to three minutes.
+    llm_description: >-
+      Generation model. "aether" is the default: it returns two takes per request, covers the widest
+      range of styles, and is the only model that accepts vocal_gender and negative_tags. "echo" returns
+      a single take with a complete song structure of up to three minutes. Credit cost differs per model.
+    form: form
+
+  - name: vocal_gender
+    type: select
+    required: false
+    options:
+      - value: f
+        label:
+          en_US: Female
+          zh_Hans: Female
+      - value: m
+        label:
+          en_US: Male
+          zh_Hans: Male
+    label:
+      en_US: Vocal gender
+      zh_Hans: Vocal gender
+    human_description:
+      en_US: Preferred lead vocal register. Applies to the Aether model and to vocal tracks only.
+      zh_Hans: Preferred lead vocal register. Applies to the Aether model and to vocal tracks only.
+    llm_description: >-
+      Preferred lead vocal register, "f" or "m". Only sent when the model is aether; leave empty otherwise.
+    form: llm
+
+  - name: negative_tags
+    type: string
+    required: false
+    label:
+      en_US: Negative tags
+      zh_Hans: Negative tags
+    human_description:
+      en_US: "Styles or elements to steer away from, e.g. 'heavy distortion, screaming'. Aether only."
+      zh_Hans: "Styles or elements to steer away from, e.g. 'heavy distortion, screaming'. Aether only."
+    llm_description: >-
+      Comma-separated styles or elements the track should avoid, up to 500 characters. Only sent when
+      the model is aether.
+    form: llm
+
+  - name: timeout_seconds
+    type: number
+    required: false
+    default: 420
+    min: 60
+    max: 900
+    label:
+      en_US: Timeout (seconds)
+      zh_Hans: Timeout (seconds)
+    human_description:
+      en_US: How long to wait for the audio before giving up. The task keeps running on Lacuna either way.
+      zh_Hans: How long to wait for the audio before giving up. The task keeps running on Lacuna either way.
+    llm_description: >-
+      Seconds to wait for the generation to finish, between 60 and 900. On timeout the task is not
+      cancelled — retrieve it later with the get_generation tool using the returned task id.
+    form: form
+
+output_schema:
+  type: object
+  properties:
+    id:
+      type: string
+      description: Generation task id.
+    status:
+      type: string
+      description: "ready when the tracks are available."
+    credits_used:
+      type: number
+      description: Credits deducted for this generation.
+    tracks:
+      type: array
+      description: Generated tracks with their hosted audio URLs.
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          audio_url:
+            type: string
+          duration:
+            type: number
+          title:
+            type: string
+          image_url:
+            type: string
+
+extra:
+  python:
+    source: tools/generate_music/generate_music.py

@@ -1,0 +1,41 @@
+identity:
+  author: "lacuna"
+  name: "lacuna_music"
+  label:
+    en_US: Lacuna Music
+    zh_Hans: Lacuna Music
+    ja_JP: Lacuna Music
+    pt_BR: Lacuna Music
+  description:
+    en_US: Generate original background music, soundtrack beds and full vocal tracks from a text description. Returns hosted audio URLs.
+    zh_Hans: Generate original background music, soundtrack beds and full vocal tracks from a text description. Returns hosted audio URLs.
+    ja_JP: Generate original background music, soundtrack beds and full vocal tracks from a text description. Returns hosted audio URLs.
+    pt_BR: Generate original background music, soundtrack beds and full vocal tracks from a text description. Returns hosted audio URLs.
+  icon: "icon.svg"
+tools:
+  - tools/generate_music/generate_music.yaml
+  - tools/create_generation/create_generation.yaml
+  - tools/get_generation/get_generation.yaml
+credentials_for_provider:
+  lacuna_api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Lacuna API Key
+      zh_Hans: Lacuna API Key
+      ja_JP: Lacuna API Key
+      pt_BR: Lacuna API Key
+    placeholder:
+      en_US: lyr_live_...
+      zh_Hans: lyr_live_...
+      ja_JP: lyr_live_...
+      pt_BR: lyr_live_...
+    help:
+      en_US: Create a key in your Lacuna dashboard. The Music API is available on the Pro plan and above.
+      zh_Hans: Create a key in your Lacuna dashboard. The Music API is available on the Pro plan and above.
+      ja_JP: Create a key in your Lacuna dashboard. The Music API is available on the Pro plan and above.
+      pt_BR: Create a key in your Lacuna dashboard. The Music API is available on the Pro plan and above.
+    url: https://www.lacuna.fm/profile/api
+extra:
+  python:
+    source: provider/lacuna.py

@@ -1,0 +1,42 @@
+version: 0.1.0
+type: plugin
+author: lacuna
+name: lacuna_music
+label:
+  en_US: Lacuna Music
+  zh_Hans: Lacuna Music
+  ja_JP: Lacuna Music
+  pt_BR: Lacuna Music
+description:
+  en_US: Generate original background music, soundtrack beds and full vocal tracks for video, podcast and game workflows. Returns hosted audio URLs you can pass straight to the next node.
+  zh_Hans: Generate original background music, soundtrack beds and full vocal tracks for video, podcast and game workflows. Returns hosted audio URLs you can pass straight to the next node.
+  ja_JP: Generate original background music, soundtrack beds and full vocal tracks for video, podcast and game workflows. Returns hosted audio URLs you can pass straight to the next node.
+  pt_BR: Generate original background music, soundtrack beds and full vocal tracks for video, podcast and game workflows. Returns hosted audio URLs you can pass straight to the next node.
+icon: icon.svg
+icon_dark: icon.svg
+contact: support@lacuna.fm
+resource:
+  memory: 268435456
+  permission:
+    tool:
+      enabled: true
+network:
+  domains:
+    - www.lacuna.fm
+plugins:
+  tools:
+    - provider/lacuna.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: 1.4.0
+created_at: 2026-08-10T13:25:12.242208+08:00
+privacy: PRIVACY.md
+repo: https://github.com/JOYLINK-LTD/lacuna-toolkit
+verified: false
