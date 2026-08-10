@@ -161,6 +161,47 @@ program
   .version(VERSION, '-v, --version', 'Print the CLI version.')
   .showHelpAfterError()
 
+// ---------------- whoami ----------------
+
+attachGlobalFlags(
+  program
+    .command('whoami')
+    .description('Show the account, plan, credit balance and limits for the current key.')
+    .addOption(
+      new Option('--output <format>', 'Output format.').choices(['json', 'table']).default('table')
+    )
+).action(async (opts, cmd: Command) => {
+  const globals = cmd.parent?.opts<GlobalOpts>() ?? {}
+  const merged: GlobalOpts = { ...globals, ...opts }
+  const client = resolveClient(merged)
+  try {
+    const account = await client.account.retrieve()
+    if (opts.output === 'json') {
+      printOutput(account, 'json')
+      return
+    }
+    const rows: Array<[string, string]> = [
+      ['Account', account.id],
+      ['Plan', account.plan],
+      ['Credits', `${account.credits.total} (${account.credits.subscription} subscription + ${account.credits.onetime} one-time)`],
+      ['Rate limit', `${account.rate_limits.requests_per_minute} req/min`],
+      ['Concurrency', `${account.rate_limits.concurrent_generations} generations`],
+      ['Auth', account.auth.kind],
+      ['Scopes', account.auth.scopes.join(', ') || '—'],
+    ]
+    if (account.auth.key) {
+      rows.push(['Key', account.auth.key.name])
+      rows.push(['Key expires', account.auth.key.expires_at ?? 'never'])
+    }
+    const width = Math.max(...rows.map(([label]) => label.length))
+    for (const [label, value] of rows) {
+      process.stdout.write(`${label.padEnd(width)}  ${value}\n`)
+    }
+  } catch (err) {
+    handleError(err)
+  }
+})
+
 // ---------------- config ----------------
 
 const config = program.command('config').description('Manage CLI credentials and defaults.')

@@ -52,9 +52,24 @@ lacuna config clear
 
 Music API access requires the **Pro** plan or above. Requests from lower tiers receive `403 permission_error / tier_insufficient`.
 
+Verify a key without spending credits:
+
+```sh
+lacuna whoami
+```
+
 ---
 
 ## Commands
+
+### Check the account
+
+```sh
+lacuna whoami
+lacuna whoami --output json
+```
+
+Prints the account id, plan, credit balance, rate limits and the key's scopes. Free — consumes no credits.
 
 ### Generate a track
 

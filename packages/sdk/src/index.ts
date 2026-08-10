@@ -8,6 +8,7 @@
 export { Lacuna } from './client'
 export type { LacunaOptions, FetchLike } from './client'
 export { MusicResource, GenerationsResource } from './resources/music'
+export { AccountResource } from './resources/account'
 export type { WaitForOptions } from './resources/music'
 export {
   LacunaError,
@@ -26,6 +27,7 @@ export {
   ServiceUnavailableError,
 } from './errors'
 export type {
+  Account,
   ApiErrorPayload,
   CreateGenerationParams,
   CreditsLowEvent,
@@ -37,6 +39,7 @@ export type {
   JobFailedEvent,
   KeyExpiringEvent,
   Model,
+  Plan,
   SelectableModel,
   Track,
   VocalGender,

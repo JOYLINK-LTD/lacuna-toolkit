@@ -22,6 +22,7 @@ Official TypeScript SDK for the [Lacuna Music API](https://www.lacuna.fm). Gener
 - [Quickstart](#quickstart)
 - [Authentication](#authentication)
 - [SDK reference](#sdk-reference)
+  - [Retrieving the account](#retrieving-the-account)
   - [Creating a generation](#creating-a-generation)
   - [Retrieving a generation](#retrieving-a-generation)
   - [Waiting for completion](#waiting-for-completion)
@@ -75,9 +76,33 @@ const lacuna = new Lacuna({ apiKey: process.env.LACUNA_API_KEY })
 
 Music API access requires the **Pro** plan or above. Requests from lower tiers receive `403 permission_error / tier_insufficient`.
 
+To check a key without spending anything, read the account:
+
+```ts
+const account = await lacuna.account.retrieve()
+console.log(account.plan, account.credits.total)
+```
+
+`account.retrieve()` is free and is the endpoint to point a connection test at — it is the only authenticated call that answers `200` without needing an existing task id or consuming credits.
+
 ---
 
 ## SDK reference
+
+### Retrieving the account
+
+```ts
+const account = await lacuna.account.retrieve()
+// {
+//   id: 'cm...',
+//   plan: 'pro',
+//   credits: { subscription: 1200, onetime: 300, total: 1500 },
+//   rate_limits: { requests_per_minute: 60, concurrent_generations: 10 },
+//   auth: { kind: 'api_key', scopes: ['music:generate'], key: { id, name, expires_at } },
+// }
+```
+
+No email or other personal data is returned — connection-test responses tend to end up in third-party logs.
 
 ### Creating a generation
 

@@ -67,6 +67,8 @@ Get a key at [lacuna.fm/profile/api](https://lacuna.fm/profile/api). It begins w
 
 Music API access requires a **Pro** plan or above. Lower tiers receive `403 permission_error / tier_insufficient` — do not retry; tell the user to upgrade.
 
+Before a first generation in a fresh environment, confirm the key works with the free account call — `npx lacuna-toolkit whoami`, or `GET /v1/me`, or `client.account.retrieve()`. It returns the plan, credit balance and rate limits, costs nothing, and turns an ambiguous failure later into a clear one now. Check `credits.total` against the model's price before generating.
+
 ## Generation parameters
 
 | Field                  | Required                | Models             | Notes                                                                   |
